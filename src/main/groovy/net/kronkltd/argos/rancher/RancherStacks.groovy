@@ -33,7 +33,7 @@ class RancherStacks {
             def msg = "${healthString} ${stack.name}"
             Map<String, String> opts = [href: "${baseUrl}env/1a5/apps/stacks/${stack.id}"]
             printItem(msg, opts)
-            printItem(msg + "\\n${stack.state}", opts + [alternate: 'true'])
+            printItem(msg + "\\n${stack.state}", opts + ([alternate: 'true'] as Map<String, GString>))
         }
     }
 
@@ -49,7 +49,7 @@ class RancherStacks {
 
             code = response.code()
             data = response.body().data
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
             code = 500
         }
 
@@ -64,7 +64,7 @@ class RancherStacks {
 
     }
 
-    def printItem(msg, opts) {
+    static printItem(msg, opts) {
         def o = opts.collect { "${it.key}=${it.value}" }.join(' ')
 
         def l = [msg, o].join(' | ')
