@@ -2,6 +2,7 @@ package net.kronkltd.argos.rancher
 
 import io.rancher.Rancher
 import io.rancher.service.StackService
+import io.rancher.type.Stack
 
 class RancherStacks {
     Map<String, String> commands = [serviceName: 'rancher ps --format {{.Name}}',
@@ -24,15 +25,30 @@ class RancherStacks {
         this.baseUrl = baseUrl
     }
 
+    def formatStack(Stack stack) {
+        if (stack.state == 'active') {
+            def healthy = stack.healthState == 'healthy'
+
+            def healthString = healthy ? ':large_blue_circle:' : ':red_circle:'
+            def msg = "${healthString} ${stack.name}"
+            Map<String, String> opts = [href: "${baseUrl}env/1a5/apps/stacks/${stack.id}"]
+            printItem(msg, opts)
+            printItem(msg + "\\n${stack.state}", opts + [alternate: 'true'])
+        }
+    }
+
     def listStacks() {
         def call = rancher.type(StackService).list()
 
         def code
+        def response
+        List<Stack> data = []
 
         try {
-            def response = call.execute()
+            response = call.execute()
 
             code = response.code()
+            data = response.body().data
         } catch (Exception ex) {
             code = 500
         }
@@ -41,21 +57,7 @@ class RancherStacks {
             println('listStacks')
             println('---')
 
-            def data = response.body().data
-
-            data
-                    .sort {a, b ->
-                (a.name <=> b.name)
-            }
-            .each {
-                if (it.state == 'active') {
-                    def healthy = it.healthState == 'healthy'
-                    def msg = "${healthy} ${it.name}"
-                    Map<String, String> opts = [href: "${baseUrl}env/1a5/apps/stacks/${it.id}" as String]
-                    printItem(msg, opts)
-                    printItem(msg + "\\n${it.state}", opts + [alternate: 'true'])
-                }
-            }
+            data.sort {a, b -> (a.name <=> b.name) }.each { formatStack it }
         } else {
             println 'Failed'
         }
