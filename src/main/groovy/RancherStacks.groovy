@@ -2,20 +2,22 @@ import io.rancher.Rancher
 import io.rancher.service.StackService
 
 class RancherStacks {
-    def baseUrl = 'REDACTED'
-    def url = new URL("${baseUrl}v2-beta/")
-    def accessKey = 'REDACTED'
-    def secretKey = 'REDACTED'
-
     Map<String, String> commands = [serviceName: 'rancher ps --format {{.Name}}',
                                     stackJson: 'rancher stacks --format json',
                                     stackName: 'rancher stacks --format {{.Stack.Name}}']
 
     Rancher rancher
 
-    RancherStacks() {
-        def config = new Rancher.Config(url, accessKey, secretKey)
-        this.rancher = new Rancher(config)
+    RancherStacks(String baseUrl, String accessKey, String secretKey) {
+        this(new Rancher.Config(new URL("${baseUrl}v2-beta/"), accessKey, secretKey))
+    }
+
+    RancherStacks(Rancher.Config config) {
+        this(new Rancher(config))
+    }
+
+    RancherStacks(Rancher rancher) {
+        this.rancher = rancher
     }
 
     def listStacks() {
@@ -43,20 +45,22 @@ class RancherStacks {
         println(l)
     }
 
-    def rancherStacks() {
+    def rancherStacks(String baseUrl) {
         def psProc = commands.stackName.execute()
         def rancherText = psProc.text
         printItem(rancherText, [:])
     }
 
     def run() {
-        println('listStacks')
-        println('---')
         listStacks()
     }
 
     static void main(String[] args) {
-        def rs = new RancherStacks()
+        def baseUrl = 'REDACTED'
+        def accessKey = 'REDACTED'
+        def secretKey = 'REDACTED'
+
+        def rs = new RancherStacks(baseUrl, accessKey, secretKey)
         rs.run()
     }
 }
