@@ -29,6 +29,8 @@ class RancherStacks {
             def color = healthy ? 'green' : 'red'
             def href = "${baseUrl}env/1a5/apps/stacks/${stack.id}"
             printItem(msg, [href: href, color: color])
+            println('--stop')
+            println('--start')
             // printItem(msg + "\\n${stack.state}", opts + ([alternate: 'true'] as Map<String, GString>))
         }
     }
