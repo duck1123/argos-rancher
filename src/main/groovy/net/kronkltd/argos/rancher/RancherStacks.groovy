@@ -5,10 +5,6 @@ import io.rancher.service.StackService
 import io.rancher.type.Stack
 
 class RancherStacks {
-    Map<String, String> commands = [serviceName: 'rancher ps --format {{.Name}}',
-                                    stackJson: 'rancher stacks --format json',
-                                    stackName: 'rancher stacks --format {{.Stack.Name}}']
-
     private final Rancher rancher
     private final String baseUrl
 
@@ -29,7 +25,6 @@ class RancherStacks {
         if (stack.state == 'active') {
             def healthy = stack.healthState == 'healthy'
 
-            def healthString = healthy ? ':large_blue_circle:' : ':red_circle:'
             def msg = "${stack.name}"
             Map<String, String> opts = [href: "${baseUrl}env/1a5/apps/stacks/${stack.id}",
                                         color: healthy ? 'green' : 'red']
@@ -71,24 +66,5 @@ class RancherStacks {
         def l = [msg, o].join(' | ')
 
         println(l)
-    }
-
-    def rancherStacks() {
-        def psProc = commands.stackName.execute()
-        def rancherText = psProc.text
-        printItem(rancherText, [:])
-    }
-
-    def run() {
-        listStacks()
-    }
-
-    static void main(String[] args) {
-        def baseUrl = 'REDACTED'
-        def accessKey = 'REDACTED'
-        def secretKey = 'REDACTED'
-
-        def rs = new RancherStacks(baseUrl, accessKey, secretKey)
-        rs.run()
     }
 }
