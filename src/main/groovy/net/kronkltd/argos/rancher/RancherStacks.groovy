@@ -30,8 +30,9 @@ class RancherStacks {
             def healthy = stack.healthState == 'healthy'
 
             def healthString = healthy ? ':large_blue_circle:' : ':red_circle:'
-            def msg = "${healthString} ${stack.name}"
-            Map<String, String> opts = [href: "${baseUrl}env/1a5/apps/stacks/${stack.id}"]
+            def msg = "${stack.name}"
+            Map<String, String> opts = [href: "${baseUrl}env/1a5/apps/stacks/${stack.id}",
+                                        color: healthy ? 'green' : 'red']
             printItem(msg, opts)
             printItem(msg + "\\n${stack.state}", opts + ([alternate: 'true'] as Map<String, GString>))
         }
@@ -54,17 +55,17 @@ class RancherStacks {
         }
 
         if (code == 200) {
-            println('listStacks')
+            println('Rancher Stacks')
             println('---')
 
             data.sort {a, b -> (a.name <=> b.name) }.each { formatStack it }
         } else {
-            println 'Failed'
+            printItem('failed', [iconName: 'network-error'])
         }
 
     }
 
-    static printItem(msg, opts) {
+    static printItem(msg, Map<String, String> opts) {
         def o = opts.collect { "${it.key}=${it.value}" }.join(' ')
 
         def l = [msg, o].join(' | ')
