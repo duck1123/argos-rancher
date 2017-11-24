@@ -22,27 +22,25 @@ class RancherStacks {
     }
 
     def formatStack(Stack stack) {
-        if (stack.state == 'active') {
-            def healthy = stack.healthState == 'healthy'
+        def healthy = stack.healthState == 'healthy'
 
+        if (stack.state == 'active') {
             def msg = "${stack.name}"
-            Map<String, String> opts = [href: "${baseUrl}env/1a5/apps/stacks/${stack.id}",
-                                        color: healthy ? 'green' : 'red']
-            printItem(msg, opts)
-            printItem(msg + "\\n${stack.state}", opts + ([alternate: 'true'] as Map<String, GString>))
+            def color = healthy ? 'green' : 'red'
+            def href = "${baseUrl}env/1a5/apps/stacks/${stack.id}"
+            printItem(msg, [href: href, color: color])
+            // printItem(msg + "\\n${stack.state}", opts + ([alternate: 'true'] as Map<String, GString>))
         }
     }
 
     def listStacks() {
         def call = rancher.type(StackService).list()
 
-        def code
-        def response
+        def code, response
         List<Stack> data = []
 
         try {
             response = call.execute()
-
             code = response.code()
             data = response.body().data
         } catch (Exception ignored) {
@@ -57,14 +55,11 @@ class RancherStacks {
         } else {
             printItem('failed', [iconName: 'network-error'])
         }
-
     }
 
     static printItem(msg, Map<String, String> opts) {
-        def o = opts.collect { "${it.key}=${it.value}" }.join(' ')
-
-        def l = [msg, o].join(' | ')
-
-        println(l)
+        def optionsString = opts.collect { "${it.key}=${it.value}" }.join(' ')
+        def line = [msg, optionsString].join(' | ')
+        println(line)
     }
 }
