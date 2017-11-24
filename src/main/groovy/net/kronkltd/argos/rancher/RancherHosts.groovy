@@ -1,18 +1,20 @@
 package net.kronkltd.argos.rancher
 
-class RancherHosts {
-    RancherHosts() {
-    }
+import io.rancher.Rancher
 
-    Panel toPanel() {
-        def panel = new Panel('Rancher Hosts')
+class RancherHosts extends Panel {
+    private final Rancher rancher
+    private final String baseUrl
+
+    RancherHosts(String baseUrl, Rancher rancher) {
+        this.baseUrl = baseUrl
+        this.rancher = rancher
+
+        this.title = 'Rancher Hosts'
 
         def i = new Item('Foo')
         i.size = 12
 
-        panel.addItem(i)
-
-
-        return panel
+        addItem(i)
     }
 }

@@ -39,8 +39,7 @@ class RancherApplication {
                 println new RancherStacks(baseUrl, rancher)
                 break
             case 'hosts':
-                def hosts = new RancherHosts()
-                println hosts.toPanel()
+                println new RancherHosts()
                 break
             default:
                 def panel = new Panel('Rancher')
