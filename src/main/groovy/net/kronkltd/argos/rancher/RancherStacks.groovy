@@ -10,14 +10,6 @@ class RancherStacks {
 
     private final StackService stackService
 
-    RancherStacks(String baseUrl, String accessKey, String secretKey) {
-        this(baseUrl, new Rancher.Config(new URL("${baseUrl}v2-beta/"), accessKey, secretKey))
-    }
-
-    RancherStacks(String baseUrl, Rancher.Config config) {
-        this(baseUrl, new Rancher(config))
-    }
-
     RancherStacks(String baseUrl, Rancher rancher) {
         this.rancher = rancher
         this.baseUrl = baseUrl

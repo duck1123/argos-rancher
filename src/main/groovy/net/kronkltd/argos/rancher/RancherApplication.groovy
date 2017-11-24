@@ -3,25 +3,18 @@ package net.kronkltd.argos.rancher
 import io.rancher.Rancher
 
 class RancherApplication {
-    private final Rancher rancher
+    private Rancher rancher
     private final Properties properties
 
-    def baseUrl = 'http://rancher.dev.int.eprize.net/'
-    def accessKey = '4D7746F25549E43DEBDD'
-    def secretKey = 'KSNmFnfV3VThzojLvTLfPkt1fbcUozC3MFGG8XCx'
-
-    RancherApplication() {
-        def config = new Rancher.Config(new URL("${baseUrl}v2-beta/"), accessKey, secretKey)
-        this.rancher = new Rancher(config)
-        this.properties = new Properties()
-        loadProperties()
-    }
+    private String baseUrl
+    private String mode
 
     static void main(String[] args) {
         new RancherApplication().run()
     }
 
-    def loadProperties() {
+    RancherApplication() {
+        this.properties = new Properties()
         File propFile = new File('argos.properties')
 
         if (propFile.exists()) {
@@ -29,11 +22,18 @@ class RancherApplication {
         } else {
             throw new RuntimeException('No Properties file')
         }
+
+        def accessKey = properties.getProperty('access-key')
+        def secretKey = properties.getProperty('secret-key')
+        this.baseUrl = properties.getProperty('base-url')
+        this.mode = properties.getProperty('mode')
+
+        def url = new URL("${baseUrl}v2-beta/")
+        def config = new Rancher.Config(url, accessKey, secretKey)
+        this.rancher = new Rancher(config)
     }
 
     def run() {
-        def mode = properties.getProperty('mode')
-
         switch (mode) {
             case 'stacks':
                 println new RancherStacks(baseUrl, rancher)
@@ -45,8 +45,8 @@ class RancherApplication {
             default:
                 def panel = new Panel('Rancher')
 
-                def i = new Item('Unknown')
-                panel.items.add(i)
+                def item = new Item('Unknown')
+                panel.addItem(item)
 
                 println(panel)
                 break
