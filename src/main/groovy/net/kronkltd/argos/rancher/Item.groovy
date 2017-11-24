@@ -7,6 +7,7 @@ class Item {
     String font
     Integer size
     String iconName
+    String href
 
     Item() {}
 
@@ -18,7 +19,8 @@ class Item {
         def opts = [color: color,
                     font: font,
                     size: size,
-                    iconName: iconName]
+                    iconName: iconName,
+                    href: href]
 
         def optString = opts
                 .collect { (it.value != null) ? "${it.key}=${it.value}" : null }

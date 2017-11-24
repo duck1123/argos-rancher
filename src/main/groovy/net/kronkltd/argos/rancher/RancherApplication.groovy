@@ -1,51 +1,55 @@
 package net.kronkltd.argos.rancher
 
-class RancherApplication {
-    private final RancherStacks rancherStacks
+import io.rancher.Rancher
 
-    RancherApplication(RancherStacks rancherStacks) {
-        this.rancherStacks = rancherStacks
+class RancherApplication {
+    private final Rancher rancher
+    private final Properties properties
+
+    def baseUrl = 'http://rancher.dev.int.eprize.net/'
+    def accessKey = '4D7746F25549E43DEBDD'
+    def secretKey = 'KSNmFnfV3VThzojLvTLfPkt1fbcUozC3MFGG8XCx'
+
+    RancherApplication() {
+        def config = new Rancher.Config(new URL("${baseUrl}v2-beta/"), accessKey, secretKey)
+        this.rancher = new Rancher(config)
+        this.properties = new Properties()
+        loadProperties()
     }
 
     static void main(String[] args) {
-        def baseUrl = 'http://rancher.dev.int.eprize.net/'
-        def accessKey = '4D7746F25549E43DEBDD'
-        def secretKey = 'KSNmFnfV3VThzojLvTLfPkt1fbcUozC3MFGG8XCx'
-
-        System.getenv()
-
-        def rs = new RancherStacks(baseUrl, accessKey, secretKey)
-        def ra = new RancherApplication(rs)
-        ra.run()
+        new RancherApplication().run()
     }
 
-    def run() {
-        Properties properties = new Properties()
+    def loadProperties() {
         File propFile = new File('argos.properties')
 
         if (propFile.exists()) {
             properties.load(propFile.newDataInputStream())
-
-            def mode = properties.getProperty('mode')
-
-            switch (mode) {
-                case 'stacks':
-                    rancherStacks.listStacks()
-                    break
-                case 'hosts':
-                    def hosts = new RancherHosts()
-                    break
-                default:
-                    def panel = new Panel('Rancher')
-
-                    def i = new Item('Unknown')
-                    panel.items.add(i)
-
-                    println(panel)
-                    break
-            }
         } else {
             throw new RuntimeException('No Properties file')
+        }
+    }
+
+    def run() {
+        def mode = properties.getProperty('mode')
+
+        switch (mode) {
+            case 'stacks':
+                println new RancherStacks(baseUrl, rancher)
+                break
+            case 'hosts':
+                def hosts = new RancherHosts()
+                println hosts.toPanel()
+                break
+            default:
+                def panel = new Panel('Rancher')
+
+                def i = new Item('Unknown')
+                panel.items.add(i)
+
+                println(panel)
+                break
         }
     }
 }

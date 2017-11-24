@@ -11,6 +11,10 @@ class Panel {
         this.title = title
     }
 
+    def addItem(Item item) {
+        items.add(item)
+    }
+
     String toString() {
 
         def parts = [title, '---']
