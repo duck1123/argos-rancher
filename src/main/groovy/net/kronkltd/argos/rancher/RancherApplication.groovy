@@ -34,21 +34,21 @@ class RancherApplication {
     }
 
     def run() {
+        Panel panel
+
         switch (mode) {
             case 'stacks':
-                println new RancherStacks(baseUrl, rancher)
+                panel = new RancherStacks(baseUrl, rancher)
                 break
             case 'hosts':
-                println new RancherHosts()
+                panel = new RancherHosts(baseUrl, rancher)
                 break
             default:
-                def panel = new Panel('Rancher')
-
-                def item = new Item('Unknown')
-                panel.addItem(item)
-
-                println(panel)
+                panel = new Panel('Rancher')
+                panel.addItem(new Item('Unknown'))
                 break
         }
+
+        println(panel)
     }
 }
