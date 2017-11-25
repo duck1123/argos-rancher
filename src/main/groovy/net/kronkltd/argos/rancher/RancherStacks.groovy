@@ -21,9 +21,7 @@ class RancherStacks extends Panel {
             def data = response.body().data
             data.sort {a, b -> (a.name <=> b.name) }.each { formatStack it }
         } catch (Exception ignored) {
-            def item = new Item('failed')
-            item.iconName = 'network-error'
-            addItem(item)
+            addItem(new Item('failed', [iconName: 'network-error']))
         }
     }
 
@@ -31,11 +29,9 @@ class RancherStacks extends Panel {
         def healthy = stack.healthState == 'healthy'
 
         if (stack.state == 'active') {
-            def item = new Item(stack.name)
-            item.color = healthy ? 'green' : 'red'
-            item.href = "${baseUrl}env/1a5/apps/stacks/${stack.id}"
-            addItem(item)
-
+            def color = healthy ? 'green' : 'red'
+            def href = "${baseUrl}env/1a5/apps/stacks/${stack.id}"
+            addItem(new Item(stack.name, [color: color, href: href]))
             addItem(new Item('--stop'))
             addItem(new Item('--start'))
         }

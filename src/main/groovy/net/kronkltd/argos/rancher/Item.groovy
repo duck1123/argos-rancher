@@ -12,7 +12,16 @@ class Item {
     Item() {}
 
     Item(String message) {
+        this()
         this.message = message
+    }
+
+    Item(String message, Map<String, Object> opts) {
+        this(message)
+
+        def t = this
+
+        opts.each {i -> t.setProperty(i.key, i.value) }
     }
 
     String toString() {

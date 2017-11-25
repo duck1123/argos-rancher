@@ -12,9 +12,6 @@ class RancherHosts extends Panel {
 
         this.title = 'Rancher Hosts'
 
-        def i = new Item('Foo')
-        i.size = 12
-
-        addItem(i)
+        addItem(new Item('Foo', [size: 12]))
     }
 }
