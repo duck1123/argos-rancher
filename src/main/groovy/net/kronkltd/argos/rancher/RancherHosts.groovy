@@ -7,10 +7,9 @@ class RancherHosts extends Panel {
     private final String baseUrl
 
     RancherHosts(String baseUrl, Rancher rancher) {
+        super('Rancher Hosts')
         this.baseUrl = baseUrl
         this.rancher = rancher
-
-        this.title = 'Rancher Hosts'
 
         addItem(new Item('Foo', [size: 12]))
     }

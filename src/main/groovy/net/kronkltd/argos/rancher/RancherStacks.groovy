@@ -11,16 +11,17 @@ class RancherStacks extends Panel {
     private final StackService stackService
 
     RancherStacks(String baseUrl, Rancher rancher) {
+        super('Rancher Stacks')
         this.rancher = rancher
         this.baseUrl = baseUrl
         this.stackService = rancher.type(StackService)
-        this.title = 'Rancher Stacks'
 
         try {
             def response = stackService.list().execute()
             def data = response.body().data
             data.sort {a, b -> (a.name <=> b.name) }.each { formatStack it }
         } catch (Exception ignored) {
+            title.iconName = 'network-error'
             addItem(new Item('failed', [iconName: 'network-error']))
         }
     }

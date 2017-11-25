@@ -1,13 +1,17 @@
 package net.kronkltd.argos.rancher
 
 class Panel {
-    String title
+    Item title
 
     List<Item> items = []
 
     Panel() { }
 
-    Panel(String title) {
+    Panel(String titleText) {
+        this(new Item(titleText))
+    }
+
+    Panel(Item title) {
         this.title = title
     }
 
