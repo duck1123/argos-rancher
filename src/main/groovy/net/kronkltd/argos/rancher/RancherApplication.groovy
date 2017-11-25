@@ -9,8 +9,9 @@ class RancherApplication {
     private String baseUrl
     private String mode
 
-    static void main(String[] args) {
-        new RancherApplication().run()
+    static void main(String... args) {
+        println("${args} ${args.size()}")
+        new RancherApplication().run(args.toList())
     }
 
     RancherApplication() {
@@ -33,8 +34,16 @@ class RancherApplication {
         this.rancher = new Rancher(config)
     }
 
-    def run() {
+    def run(List<String> args) {
         Panel panel
+
+        if (!args.empty) {
+            def command = args.first()
+
+            println("Command: ${command}")
+        } else {
+            println('No command')
+        }
 
         switch (mode) {
             case 'stacks':
