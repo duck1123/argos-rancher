@@ -1,26 +1,43 @@
-group 'net.kronkltd'
-version '1.0-SNAPSHOT'
+plugins {
+    id 'org.springframework.boot' version '1.5.8.RELEASE'
+    id 'java'
+}
 
 apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'application'
 
+group 'net.kronkltd'
+version '1.0-SNAPSHOT'
+
 sourceCompatibility = 1.8
 
 mainClassName = 'net.kronkltd.argos.rancher.RancherApplication'
 
+jar {
+    baseName = 'myproject'
+    version =  '0.0.1-SNAPSHOT'
+}
+
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.3.11'
     compile 'br.com.basis:rancher-java-sdk:1.0.0'
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    compile "org.springframework.boot:spring-boot-starter"
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile "org.springframework.boot:spring-boot-starter-test"
 }
 
 run {
     if (project.hasProperty('runArgs')) {
         args = ((String) project.findProperty('runArgs')).split(' ').toList()
     }
+}
+
+bootRepackage {
+    mainClass = 'net.kronkltd.argos.rancher.RancherApplication'
 }

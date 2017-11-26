@@ -1,8 +1,12 @@
 package net.kronkltd.argos.rancher
 
 import io.rancher.Rancher
+import org.springframework.boot.CommandLineRunner
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
 
-class RancherApplication {
+@SpringBootApplication
+class RancherApplication implements CommandLineRunner {
     private Rancher rancher
     private final Properties properties
 
@@ -10,11 +14,7 @@ class RancherApplication {
     private String mode
 
     static void main(String... args) {
-        def application = new RancherApplication()
-        def arguments = args.toList().findAll { (it != null) && (!it.empty) }
-
-        println("${arguments} ${arguments.size()}")
-        application.run(arguments)
+        SpringApplication.run(RancherApplication, args)
     }
 
     RancherApplication() {
@@ -37,11 +37,16 @@ class RancherApplication {
         this.rancher = new Rancher(config)
     }
 
-    def run(List<String> args) {
+    @Override
+    void run(String... args) {
         Panel panel
 
-        if (!args.empty) {
-            def command = args.first()
+        def arguments = args.toList().findAll { (it != null) && (!it.empty) }
+
+        println("${arguments} ${arguments.size()}")
+
+        if (!arguments.empty) {
+            def command = arguments.first()
 
             println("Command: ${command}")
         } else {
