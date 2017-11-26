@@ -10,8 +10,11 @@ class RancherApplication {
     private String mode
 
     static void main(String... args) {
-        println("${args} ${args.size()}")
-        new RancherApplication().run(args.toList())
+        def application = new RancherApplication()
+        def arguments = args.toList().findAll { (it != null) && (!it.empty) }
+
+        println("${arguments} ${arguments.size()}")
+        application.run(arguments)
     }
 
     RancherApplication() {
@@ -43,21 +46,21 @@ class RancherApplication {
             println("Command: ${command}")
         } else {
             println('No command')
-        }
 
-        switch (mode) {
-            case 'stacks':
-                panel = new RancherStacks(baseUrl, rancher)
-                break
-            case 'hosts':
-                panel = new RancherHosts(baseUrl, rancher)
-                break
-            default:
-                panel = new Panel('Rancher')
-                panel.addItem(new Item('Unknown'))
-                break
-        }
+            switch (mode) {
+                case 'stacks':
+                    panel = new RancherStacks(baseUrl, rancher)
+                    break
+                case 'hosts':
+                    panel = new RancherHosts(baseUrl, rancher)
+                    break
+                default:
+                    panel = new Panel('Rancher')
+                    panel.addItem(new Item('Unknown'))
+                    break
+            }
 
-        println(panel)
+            println(panel)
+        }
     }
 }
