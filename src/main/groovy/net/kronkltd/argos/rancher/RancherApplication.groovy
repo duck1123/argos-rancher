@@ -1,6 +1,7 @@
 package net.kronkltd.argos.rancher
 
 import io.rancher.Rancher
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -17,7 +18,9 @@ class RancherApplication implements CommandLineRunner {
         SpringApplication.run(RancherApplication, args)
     }
 
-    RancherApplication() {
+    @Autowired
+    RancherApplication(RancherConfiguration configuration) {
+        println("Mode: ${configuration.mode}")
         this.properties = new Properties()
         File propFile = new File('argos.properties')
 
@@ -50,7 +53,7 @@ class RancherApplication implements CommandLineRunner {
 
             println("Command: ${command}")
         } else {
-            println('No command')
+            println('xNo command')
 
             switch (mode) {
                 case 'stacks':
