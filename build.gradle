@@ -11,16 +11,19 @@ plugins {
     id 'org.springframework.boot' version '1.5.8.RELEASE'
 }
 
-//apply plugin: 'application'
 apply plugin: 'groovy'
-apply plugin: 'propdeps'
+
+configure(allprojects) {
+    apply plugin: 'propdeps'
+    apply plugin: 'propdeps-maven'
+    apply plugin: 'propdeps-idea'
+    apply plugin: 'propdeps-eclipse'
+}
 
 group 'net.kronkltd'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
-
-//mainClassName = 'net.kronkltd.argos.rancher.RancherApplication'
 
 repositories {
     mavenCentral()
@@ -33,22 +36,16 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter"
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile "org.springframework.boot:spring-boot-starter-test"
-    optional "org.springframework.boot:spring-boot-configuration-processor:1.5.8.RELEASE"
+    optional "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 compileJava.dependsOn(processResources)
 
 jar {
-    baseName = 'myproject'
-    version =  '0.0.1-SNAPSHOT'
+    baseName = 'argos-rancher'
+    version =  '1.0-SNAPSHOT'
 }
 
-//run {
-//    if (project.hasProperty('runArgs')) {
-//        args = ((String) project.findProperty('runArgs')).split(' ').toList()
-//    }
-//}
-//
 bootRepackage {
     mainClass = 'net.kronkltd.argos.rancher.RancherApplication'
 }

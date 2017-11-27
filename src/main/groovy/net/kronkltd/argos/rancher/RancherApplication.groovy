@@ -20,7 +20,7 @@ class RancherApplication implements CommandLineRunner {
 
     @Autowired
     RancherApplication(RancherConfiguration configuration) {
-        println("Mode: ${configuration.mode}")
+        // println("Mode: ${configuration.mode}")
         this.properties = new Properties()
         File propFile = new File('argos.properties')
 
@@ -46,14 +46,14 @@ class RancherApplication implements CommandLineRunner {
 
         def arguments = args.toList().findAll { (it != null) && (!it.empty) }
 
-        println("${arguments} ${arguments.size()}")
+        // println("${arguments} ${arguments.size()}")
 
         if (!arguments.empty) {
             def command = arguments.first()
 
             println("Command: ${command}")
         } else {
-            println('xNo command')
+            // println('xNo command')
 
             switch (mode) {
                 case 'stacks':
