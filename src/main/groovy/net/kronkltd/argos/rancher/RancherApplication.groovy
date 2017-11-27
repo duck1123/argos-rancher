@@ -33,7 +33,7 @@ class RancherApplication implements CommandLineRunner {
         def accessKey = properties.getProperty('access-key')
         def secretKey = properties.getProperty('secret-key')
         this.baseUrl = properties.getProperty('base-url')
-        this.mode = properties.getProperty('mode')
+        this.mode = configuration.mode
 
         def url = new URL("${baseUrl}v2-beta/")
         def config = new Rancher.Config(url, accessKey, secretKey)

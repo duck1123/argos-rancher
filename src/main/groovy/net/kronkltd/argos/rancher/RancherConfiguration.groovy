@@ -10,7 +10,6 @@ class RancherConfiguration {
 
     String accessKey
 
-    @NotBlank
     String secretKey
 
 }
