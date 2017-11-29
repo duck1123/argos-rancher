@@ -3,22 +3,18 @@ buildscript {
         maven { url 'http://repo.spring.io/plugins-release' }
     }
     dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
         classpath 'io.spring.gradle:propdeps-plugin:0.0.9.RELEASE'
     }
 }
 
-plugins {
-    id 'org.springframework.boot' version '1.5.8.RELEASE'
-}
-
+apply plugin: 'java'
 apply plugin: 'groovy'
-
-configure(allprojects) {
-    apply plugin: 'propdeps'
-    apply plugin: 'propdeps-maven'
-    apply plugin: 'propdeps-idea'
-    apply plugin: 'propdeps-eclipse'
-}
+apply plugin: 'org.springframework.boot'
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-maven'
+apply plugin: 'propdeps-idea'
+apply plugin: 'propdeps-eclipse'
 
 group 'net.kronkltd'
 version '1.0-SNAPSHOT'
@@ -40,10 +36,15 @@ dependencies {
 }
 
 compileJava.dependsOn(processResources)
+compileGroovy.dependsOn(processResources)
 
 jar {
     baseName = 'argos-rancher'
     version =  '1.0-SNAPSHOT'
+}
+
+bootRun {
+    addResources = true
 }
 
 bootRepackage {

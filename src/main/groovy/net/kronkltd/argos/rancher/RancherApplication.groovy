@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 @SpringBootApplication
 class RancherApplication implements CommandLineRunner {
     private Rancher rancher
-    private final Properties properties
 
     private String baseUrl
     private String mode
@@ -20,19 +19,9 @@ class RancherApplication implements CommandLineRunner {
 
     @Autowired
     RancherApplication(RancherConfiguration configuration) {
-        // println("Mode: ${configuration.mode}")
-        this.properties = new Properties()
-        File propFile = new File('argos.properties')
-
-        if (propFile.exists()) {
-            properties.load(propFile.newDataInputStream())
-        } else {
-            throw new RuntimeException('No Properties file')
-        }
-
-        def accessKey = properties.getProperty('access-key')
-        def secretKey = properties.getProperty('secret-key')
-        this.baseUrl = properties.getProperty('base-url')
+        def accessKey = configuration.accessKey
+        def secretKey = configuration.secretKey
+        this.baseUrl = configuration.baseUrl
         this.mode = configuration.mode
 
         def url = new URL("${baseUrl}v2-beta/")
